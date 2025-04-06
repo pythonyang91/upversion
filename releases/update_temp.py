@@ -23,6 +23,7 @@ def calculate_sha256(file_path):
             sha256_hash.update(byte_block)
     return sha256_hash.hexdigest()
 
+
 def main():
     # 读取 version.json 文件
     version_file = os.path.join(os.path.dirname(__file__), "version.json")
@@ -30,7 +31,6 @@ def main():
         version_info = json.load(f)
 
     download_url = version_info["url"]
-    expected_sha256 = version_info["sha256"]
     changelog = version_info["changelog"]
 
     print(f"更新日志: {changelog}")
@@ -40,14 +40,6 @@ def main():
     new_file_path = os.path.join(desktop_path, "键位模拟器_new.exe")
     print("正在下载更新文件...")
     download_file(download_url, new_file_path)
-
-    # 验证文件完整性
-    print("正在验证文件完整性...")
-    downloaded_sha256 = calculate_sha256(new_file_path)
-    if downloaded_sha256 != expected_sha256:
-        print("文件校验失败，更新中止！")
-        os.remove(new_file_path)
-        sys.exit(1)
 
     # 关闭正在运行的“键位模拟器.exe”
     print("正在关闭正在运行的程序...")
